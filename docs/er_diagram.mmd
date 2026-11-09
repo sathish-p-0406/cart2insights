@@ -1,0 +1,80 @@
+erDiagram
+    CUSTOMERS ||--o{ ORDERS : places
+    ORDERS ||--|{ ITEMS : contains
+    ORDERS ||--o{ PAYMENTS : "paid by"
+    ORDERS ||--o| REVIEWS : receives
+    PRODUCTS ||--o{ ITEMS : "appears in"
+    SELLERS ||--o{ ITEMS : sells
+    CATEGORY_TRANSLATION ||--o{ PRODUCTS : translates
+    GEOLOCATION ||..o{ CUSTOMERS : "zip prefix (logical)"
+    GEOLOCATION ||..o{ SELLERS : "zip prefix (logical)"
+    CUSTOMERS {
+        TEXT customer_id PK
+        TEXT customer_unique_id
+        TEXT customer_zip_code_prefix
+        TEXT customer_city
+        TEXT customer_state
+    }
+    GEOLOCATION {
+        TEXT geolocation_zip_code_prefix PK
+        REAL geolocation_lat
+        REAL geolocation_lng
+        TEXT geolocation_city
+        TEXT geolocation_state
+    }
+    ORDERS {
+        TEXT order_id PK
+        TEXT customer_id FK
+        TEXT order_status
+        TIMESTAMP order_purchase_timestamp
+        TIMESTAMP order_approved_at
+        TIMESTAMP order_delivered_carrier_date
+        TIMESTAMP order_delivered_customer_date
+        TIMESTAMP order_estimated_delivery_date
+    }
+    ITEMS {
+        TEXT order_id PK, FK
+        INTEGER order_item_id PK
+        TEXT product_id FK
+        TEXT seller_id FK
+        TIMESTAMP shipping_limit_date
+        REAL price
+        REAL freight_value
+    }
+    PAYMENTS {
+        TEXT order_id PK, FK
+        INTEGER payment_sequential PK
+        TEXT payment_type
+        INTEGER payment_installments
+        REAL payment_value
+    }
+    REVIEWS {
+        TEXT review_id PK
+        TEXT order_id FK
+        INTEGER review_score
+        TEXT review_comment_title
+        TEXT review_comment_message
+        TIMESTAMP review_creation_date
+        TIMESTAMP review_answer_timestamp
+    }
+    PRODUCTS {
+        TEXT product_id PK
+        TEXT product_category_name FK
+        REAL product_name_length
+        REAL product_description_length
+        REAL product_photos_qty
+        REAL product_weight_g
+        REAL product_length_cm
+        REAL product_height_cm
+        REAL product_width_cm
+    }
+    SELLERS {
+        TEXT seller_id PK
+        TEXT seller_zip_code_prefix
+        TEXT seller_city
+        TEXT seller_state
+    }
+    CATEGORY_TRANSLATION {
+        TEXT product_category_name PK
+        TEXT product_category_name_english
+    }
